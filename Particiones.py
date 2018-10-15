@@ -26,12 +26,11 @@ y[0]=j
 
 s=np.zeros((N+1,))
 s[0]=i
-print(i)
 t=np.zeros((N+1,))
 t[0]=j
 #Parametros de acople (utilizaremos los mismos para ambos acoples)
-m=0.00
-e=0.6
+m=0.4
+e=0.2
 
 #n es el numero de particiones que se desean hacer y x es una lista   
 
@@ -152,10 +151,10 @@ def Inf(X,Y,n):
 
 for k in range(N):
     #acople 1
-    """u=x[k]+m*(y[k]-x[k])
+    u=x[k]+m*(y[k]-x[k])
     v=y[k]+e*(x[k]-y[k])
     x[k+1]=f(u,r)
-    y[k+1]=g(v,a1)"""
+    y[k+1]=g(v,a1)
     #acople 2
     w=f(s[k],r)*(1-m)+m*f(t[k],r)
     z=g(t[k],a1)*(1-e)+e*g(s[k],a1)

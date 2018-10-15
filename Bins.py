@@ -1,15 +1,14 @@
-
 import numpy as np
 import math
 #Numero de particiones
 
-M=4
+M=8
 
 #Valores de r y a
 
 r=3.99
 a1=0.5
-N=2500
+N=4500
 
 
 #valores de las condiciones iniciales
@@ -30,8 +29,8 @@ s[0]=i
 t=np.zeros((N+1,))
 t[0]=j
 #Parametros de acople (utilizaremos los mismos para ambos acoples)
-m=0.00
-e=0.6
+m=0.4
+e=0.2
 
 #n es el numero de particiones que se desean hacer y x es una lista   
 
@@ -62,31 +61,41 @@ def g(x,a):
 
 def num(x,n):
     num=[]
-    for i in range(0,len(x)-int(len(x)/n),n):
-        nu=0
-        p=[]
-        if i<len(x)-n:
+    if len(x)%n==0:
+        for i in range(0,len(x),n):
+            nu=0
+            p=[]
             for j in range(n):
                 p.append(x[i+j])
-
             for j in range(len(p)):
                 nu=p[j]*2**((n-1)-j)+nu
-        num.append(nu)   
-    return np.array(num)
-
+            num.append(nu)   
+    else:
+        for i in range(0,len(x)-int(len(x)/n),n):
+            nu=0
+            p=[]
+            for j in range(n):
+                p.append(x[i+j])
+            for j in range(len(p)):
+                nu=p[j]*2**((n-1)-j)+nu
+            num.append(nu)
+    return num
 
 
 #Funcion para calcular las probabilidades marginales se ingresa el arreglo
 # y  n es el numero de particiones devolvera un arreglo con las probabilidades marginales
 #para n particiones
+
 def Mar(X,n):
     X_p=np.zeros((n,))
     for i in range(n):
-        a=0
-        X_p[i]=np.count_nonzero(X == i)
-        
-    return X_p/len(x)
-
+        contador=0
+        for j in X:
+            if j==i:
+                contador+=1
+        X_i=contador/len(X)
+        X_p[i]=X_i
+    return X_p
 
 def Conj(X,Y,n):
     XY_p=np.zeros((n,n))
@@ -144,7 +153,6 @@ def Inf(X,Y,n):
     e=Mar(Y,n)
     f=Conj1(Y,X,n)
     g=ConjX(Y,n)
-    
     T=0
     for i in range(len(a)):
         for j in range(n):
@@ -161,7 +169,6 @@ def Inf(X,Y,n):
                 w=c[j,k]*g[i,j]
                 if v>0 and w>0:
                     U=f[i,j,k]*math.log2(v/w)+U
-
     return T,U
 
 for k in range(N):
@@ -183,7 +190,7 @@ Y=particion(y,2)
 S=particion(s,2)
 T=particion(t,2)
 
-#Vamos a guardar todos los datos en archivos de la siguiente manera:   Z    informacion mutua    tras entr x-->y   tras entr y-->x
+
 file3=open('datos3.txt','w') #Archivo para el acople 1 
 file4=open('datos4.txt','w') #Archivo para el acople 2
 
@@ -191,7 +198,7 @@ for l in range(2,M):
     A=0
     B=0
     k=2**l
-    print(l,k)
+    print(l)
     X_1=num(X,l)
     Y_1=num(Y,l)
     S_1=num(S,l)

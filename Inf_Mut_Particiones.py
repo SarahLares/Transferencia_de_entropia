@@ -36,11 +36,11 @@ e=0.2
 
 def particion(x,n):
     b=[]
-    for i in x:
+    for i in range(500,len(x)):
         contador=0
         for j in range(n):
             a=0
-            if contador*(1/n)< i <=(contador+1)*(1/n):
+            if contador*(1/n)<x[i]<=(contador+1)*(1/n):
                 a=contador
                 b.append(a)
             contador+=1
@@ -85,49 +85,10 @@ def Conj(X,Y,n):
             XY_p[i,j]=contador
     return XY_p/len(X)
 
-#Funcion para calcula las probabilidades conjuntas de x_n+1,x_n y y_n
-#n es el numero de particiones 
-
-def Conj1(X,Y,n):
-    X_P=np.zeros((n,n,n))
-    for k in range(n):
-        for i in range(n):
-            for j in range(n):
-                contador=0
-                for l in range(len(X)):
-                    if l+1<len(X):
-                        t=X[l+1]
-                        u=X[l]
-                        v=Y[l]
-                        if t==k and u==i and v==j:
-                            contador+=1
-                X_P[k,i,j]=contador
-    return X_P/(len(X)-1)
-
-#Ahora calculamos las probabilidades conjuntas en x_n y x_n+1
-#n es el numero de particiones 
-def ConjX(X,n):
-    XY_p=np.zeros((n,n))
-    for i in range(n):
-        for j in range(n):
-            contador=0
-            for k in range(len(X)):
-                if k+1<len(X):
-                    t=X[k+1]
-                    u=X[k]
-                    if t==i and u==j:
-                        contador+=1
-            XY_p[i,j]=contador
-    return XY_p/(len(X)-1)
-
 def Inf(X,Y,n):
-    a=Conj1(X,Y,n)
     b=Mar(X,n)
     c=Conj(X,Y,n)
-    d=ConjX(X,n)
     e=Mar(Y,n)
-    f=Conj1(Y,X,n)
-    g=ConjX(Y,n)
     
     H1=0
     for i in range(len(c)):
